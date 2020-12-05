@@ -12,16 +12,16 @@
   using HttpQueryParas = System.Collections.Generic.Dictionary<System.String, System.String>;
   using HttpResponseHandle = System.Action<System.Net.Http.HttpResponseMessage>;
   using HttpRequestErrorHandle = System.Action<System.Exception>;
-  public partial class HttpClientExten {
-    public HttpClientExten() { }
-    public HttpClient AvailableHttpClient(int Timeout = 30) {
-      var Client = new HttpClient();
-      Client.Timeout = TimeSpan.FromSeconds(Timeout);
-      return Client;
+  public partial class HttpClientW {
+    public HttpClientW() : this(new HttpClient()) { }
+    public HttpClientW(HttpClient Client) {
+      HttpClient = Client;
     }
 
+    public readonly HttpClient HttpClient;
+
     #region FormKits
-    public static MultipartFormDataContent AssembleHttpForm_Multipart_form_data(HttpFormParas FormData) {
+    public static MultipartFormDataContent GeneratHttpForm_Multipart_form_data(HttpFormParas FormData) {
       var Content = new MultipartFormDataContent();
       foreach (var FormPa in FormData) {
         if (FormPa.Value == null) continue;
@@ -59,30 +59,29 @@
       }
 
     }
-    public static string AssembleHttpQueryString(string Uri, HttpQueryParas QueryData) {
+    public static string GeneratHttpQueryString(string Uri, HttpQueryParas QueryData) {
       return QueryHelpers.AddQueryString(Uri, QueryData);
     }
-    public static HttpClient AssembleHttpHeader(HttpClient Client, HttpHeaderParas HeaderData) {
+    public void SetHttpHeader(HttpClient Client, HttpHeaderParas HeaderData) {
       if (HeaderData != null && HeaderData.Count > 0) {
         foreach (var item in HeaderData) {
           Client.DefaultRequestHeaders.Add(Enum.GetName(typeof(System.Net.HttpRequestHeader), item.Key), item.Value);
         }
       }
-      return Client;
     }
 
-    public static HttpRequestMessage DefaultMessage(HttpMethod Method) { return new HttpRequestMessage() { Method = Method }; }
-    public static HttpRequestMessage AddUriAndQuery(HttpRequestMessage Message, string Uri, HttpQueryParas Query = null) {
-      Message.RequestUri = new Uri(Query == null ? Uri : AssembleHttpQueryString(Uri, Query));
+    public static HttpRequestMessage CreateDefaultMessage(HttpMethod Method) { return new HttpRequestMessage() { Method = Method }; }
+    public static HttpRequestMessage SetUriAndQuery(HttpRequestMessage Message, string Uri, HttpQueryParas Query = null) {
+      Message.RequestUri = new Uri(Query == null ? Uri : GeneratHttpQueryString(Uri, Query));
       return Message;
     }
-    public static HttpRequestMessage AddForm(HttpRequestMessage Message, HttpFormParas Form = null) {
+    public static HttpRequestMessage SetRequestForm(HttpRequestMessage Message, HttpFormParas Form = null) {
       if (Form != null) {
-        Message.Content = AssembleHttpForm_Multipart_form_data(Form);
+        Message.Content = GeneratHttpForm_Multipart_form_data(Form);
       }
       return Message;
     }
-    public static HttpRequestMessage AddHeaders(HttpRequestMessage Message, HttpHeaderParas Header = null) {
+    public static HttpRequestMessage SetRequestHeaders(HttpRequestMessage Message, HttpHeaderParas Header = null) {
       if (Header != null) {
         foreach (var item in Header) {
           Message.Headers.Add(Enum.GetName(typeof(System.Net.HttpRequestHeader), item.Key), item.Value);
@@ -90,66 +89,67 @@
       }
       return Message;
     }
+
     #endregion
     #region Exten
-    public async Task HttpPostAsync(string Url, HttpQueryParas Query = null, HttpFormParas Form = null, HttpResponseHandle Response = null, HttpRequestErrorHandle Catched = null) {
+    public async Task HttpPostHandled(string Url, HttpQueryParas Query = null, HttpFormParas Form = null, HttpResponseHandle Response = null, HttpRequestErrorHandle Catched = null) {
       try {
-        var ResponseMessage = await AvailableHttpClient().PostAsync(
-          Query == null ? Url : AssembleHttpQueryString(Url, Query),
-          Form == null ? null : AssembleHttpForm_Multipart_form_data(Form));
+        var ResponseMessage = await HttpClient.PostAsync(
+          Query == null ? Url : GeneratHttpQueryString(Url, Query),
+          Form == null ? null : GeneratHttpForm_Multipart_form_data(Form));
         Response?.Invoke(ResponseMessage);
       }
       catch (Exception e) {
         Catched?.Invoke(e);
       }
     }
-    public async Task<HttpResponseMessage> HttpPostAsyncTask(string Url, HttpQueryParas Query = null, HttpFormParas Form = null) {
-      return await AvailableHttpClient().PostAsync(
-         Query == null ? Url : AssembleHttpQueryString(Url, Query),
-         Form == null ? null : AssembleHttpForm_Multipart_form_data(Form));
+    public async Task<HttpResponseMessage> HttpPostAsync(string Url, HttpQueryParas Query = null, HttpFormParas Form = null) {
+      return await HttpClient.PostAsync(
+         Query == null ? Url : GeneratHttpQueryString(Url, Query),
+         Form == null ? null : GeneratHttpForm_Multipart_form_data(Form));
     }
 
-    public async Task HttpGetAsync(string Url, HttpQueryParas Query = null, HttpResponseHandle Response = null, HttpRequestErrorHandle Catched = null) {
+    public async Task HttpGetHandled(string Url, HttpQueryParas Query = null, HttpResponseHandle Response = null, HttpRequestErrorHandle Catched = null) {
       try {
-        var ResponseMessage = await AvailableHttpClient().GetAsync(Query == null ? Url : AssembleHttpQueryString(Url, Query));
+        var ResponseMessage = await HttpClient.GetAsync(Query == null ? Url : GeneratHttpQueryString(Url, Query));
         Response?.Invoke(ResponseMessage);
       }
       catch (Exception e) {
         Catched?.Invoke(e);
       }
     }
-    public async Task<HttpResponseMessage> HttpGetAsyncTask(string Url, HttpQueryParas Query = null) {
-      return await AvailableHttpClient().GetAsync(Query == null ? Url : AssembleHttpQueryString(Url, Query));
+    public async Task<HttpResponseMessage> HttpGetAsync(string Url, HttpQueryParas Query = null) {
+      return await HttpClient.GetAsync(Query == null ? Url : GeneratHttpQueryString(Url, Query));
     }
 
-    public async Task HttpPutAsync(string Url, HttpQueryParas Query = null, HttpFormParas Form = null, HttpResponseHandle Response = null, HttpRequestErrorHandle Catched = null) {
+    public async Task HttpPutHandled(string Url, HttpQueryParas Query = null, HttpFormParas Form = null, HttpResponseHandle Response = null, HttpRequestErrorHandle Catched = null) {
       try {
-        var ResponseMessage = await AvailableHttpClient().PutAsync(
-        Query == null ? Url : AssembleHttpQueryString(Url, Query),
-        Form == null ? null : AssembleHttpForm_Multipart_form_data(Form));
+        var ResponseMessage = await HttpClient.PutAsync(
+        Query == null ? Url : GeneratHttpQueryString(Url, Query),
+        Form == null ? null : GeneratHttpForm_Multipart_form_data(Form));
         Response?.Invoke(ResponseMessage);
       }
       catch (Exception e) {
         Catched?.Invoke(e);
       }
     }
-    public async Task<HttpResponseMessage> HttpPutAsyncTask(string Url, HttpQueryParas Query = null, HttpFormParas Form = null) {
-      return await AvailableHttpClient().PutAsync(
-              Query == null ? Url : AssembleHttpQueryString(Url, Query),
-              Form == null ? null : AssembleHttpForm_Multipart_form_data(Form));
+    public async Task<HttpResponseMessage> HttpPutAsync(string Url, HttpQueryParas Query = null, HttpFormParas Form = null) {
+      return await HttpClient.PutAsync(
+              Query == null ? Url : GeneratHttpQueryString(Url, Query),
+              Form == null ? null : GeneratHttpForm_Multipart_form_data(Form));
     }
 
-    public async Task HttpDeleteAsync(string Url, HttpQueryParas Query = null, HttpResponseHandle Response = null, HttpRequestErrorHandle Catched = null) {
+    public async Task HttpDeleteHandled(string Url, HttpQueryParas Query = null, HttpResponseHandle Response = null, HttpRequestErrorHandle Catched = null) {
       try {
-        var ResponseMessage = await AvailableHttpClient().DeleteAsync(Query == null ? Url : AssembleHttpQueryString(Url, Query));
+        var ResponseMessage = await HttpClient.DeleteAsync(Query == null ? Url : GeneratHttpQueryString(Url, Query));
         Response?.Invoke(ResponseMessage);
       }
       catch (Exception e) {
         Catched?.Invoke(e);
       }
     }
-    public async Task<HttpResponseMessage> HttpDeleteAsyncTask(string Url, HttpQueryParas Query = null) {
-      return await AvailableHttpClient().DeleteAsync(Query == null ? Url : AssembleHttpQueryString(Url, Query));
+    public async Task<HttpResponseMessage> HttpDeleteAsync(string Url, HttpQueryParas Query = null) {
+      return await HttpClient.DeleteAsync(Query == null ? Url : GeneratHttpQueryString(Url, Query));
     }
     #endregion
 
