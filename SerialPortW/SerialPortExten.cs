@@ -1,4 +1,4 @@
-﻿namespace SerialPortW {
+﻿namespace WrappedCommunication {
   using System;
   using System.Collections.Generic;
   using System.Text;

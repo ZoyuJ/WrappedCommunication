@@ -6,7 +6,7 @@
     <SharedGUID>d2d26b71-dee4-46e5-b531-35ee02a21d8b</SharedGUID>
   </PropertyGroup>
   <PropertyGroup Label="Configuration">
-    <Import_RootNamespace>SerialPortW</Import_RootNamespace>
+    <Import_RootNamespace>WrappedCommunication</Import_RootNamespace>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)SerialPortExten.cs" />
