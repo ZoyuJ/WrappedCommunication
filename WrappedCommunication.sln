@@ -3,18 +3,22 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30711.63
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Try", "Try\Try.csproj", "{7E3DC15C-7550-4FA3-A4A2-BF67DA04AA8A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Try", "Try\Try.csproj", "{7E3DC15C-7550-4FA3-A4A2-BF67DA04AA8A}"
 EndProject
 Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "HttpClientW", "HttpClientW\HttpClientW.shproj", "{66450E79-3246-4A47-AD3F-4A06A2F50931}"
 EndProject
 Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "SerialPortW", "SerialPortW\SerialPortW.shproj", "{D2D26B71-DEE4-46E5-B531-35EE02A21D8B}"
 EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "AspnetCoreSiganlRClientW", "AspnetCoreSiganlRClientW\AspnetCoreSiganlRClientW.shproj", "{E6915A63-EE6F-4358-9410-8F4909A7BB76}"
+EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		HttpClientW\HttpClient.projitems*{66450e79-3246-4a47-ad3f-4a06a2f50931}*SharedItemsImports = 13
+		AspnetCoreSiganlRClientW\AspnetCoreSiganlRClientW.projitems*{7e3dc15c-7550-4fa3-a4a2-bf67da04aa8a}*SharedItemsImports = 5
 		HttpClientW\HttpClient.projitems*{7e3dc15c-7550-4fa3-a4a2-bf67da04aa8a}*SharedItemsImports = 5
 		SerialPortW\SerialPortW.projitems*{7e3dc15c-7550-4fa3-a4a2-bf67da04aa8a}*SharedItemsImports = 5
 		SerialPortW\SerialPortW.projitems*{d2d26b71-dee4-46e5-b531-35ee02a21d8b}*SharedItemsImports = 13
+		AspnetCoreSiganlRClientW\AspnetCoreSiganlRClientW.projitems*{e6915a63-ee6f-4358-9410-8f4909a7bb76}*SharedItemsImports = 13
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

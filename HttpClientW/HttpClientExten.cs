@@ -1,17 +1,17 @@
 ﻿namespace WrappedCommunication {
   using System;
   using System.Collections;
-  using System.Collections.Generic;
   using System.IO;
   using System.Net.Http;
   using System.Threading.Tasks;
 
   using Microsoft.AspNetCore.WebUtilities;
+
   using HttpFormParas = System.Collections.Generic.Dictionary<System.String, System.Object>;
   using HttpHeaderParas = System.Collections.Generic.Dictionary<System.Net.HttpRequestHeader, System.String>;
   using HttpQueryParas = System.Collections.Generic.Dictionary<System.String, System.String>;
-  using HttpResponseHandle = System.Action<System.Net.Http.HttpResponseMessage>;
   using HttpRequestErrorHandle = System.Action<System.Exception>;
+  using HttpResponseHandle = System.Action<System.Net.Http.HttpResponseMessage>;
   public partial class HttpClientW {
     public HttpClientW() : this(new HttpClient()) { }
     public HttpClientW(HttpClient Client) {

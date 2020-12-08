@@ -9,8 +9,13 @@
 
   <Import Project="..\SerialPortW\SerialPortW.projitems" Label="Shared" />
 
+  <Import Project="..\AspnetCoreSiganlRClientW\AspnetCoreSiganlRClientW.projitems" Label="Shared" />
+
   <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.SignalR.Client" Version="5.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.WebUtilities" Version="2.0.0" />
+    <PackageReference Include="Microsoft.CodeAnalysis.Common" Version="3.8.0" />
+    <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Workspaces" Version="3.8.0" />
     <PackageReference Include="System.IO.Ports" Version="5.0.0" />
   </ItemGroup>
 
