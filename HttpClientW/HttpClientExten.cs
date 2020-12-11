@@ -37,9 +37,6 @@
           case string s:
             Content.Add(new StringContent(s), $"\"{Key}\"");
             break;
-          case int s:
-            Content.Add(new StringContent(s.ToString()), $"\"{Key}\"");
-            break;
           case MemoryStream s:
             Content.Add(new ByteArrayContent(s.ToArray()), $"\"{Key}\"", $"{Key}");
             break;
@@ -55,6 +52,7 @@
             }
             break;
           default:
+            Content.Add(new StringContent(Value.ToString()), $"\"{Key}\"");
             break;
         }
       }
