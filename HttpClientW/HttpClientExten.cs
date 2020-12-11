@@ -3,6 +3,7 @@
   using System.Collections;
   using System.IO;
   using System.Net.Http;
+  using System.Text;
   using System.Threading.Tasks;
 
   using Microsoft.AspNetCore.WebUtilities;
@@ -59,6 +60,9 @@
       }
 
     }
+    public static StringContent GenerateHttpForm_Json(string JsonData) {
+      return new StringContent(JsonData, Encoding.UTF8, "application/json");
+    }
     public static string GeneratHttpQueryString(string Uri, HttpQueryParas QueryData) {
       return QueryHelpers.AddQueryString(Uri, QueryData);
     }
@@ -89,6 +93,12 @@
       }
       return Message;
     }
+    public static HttpRequestMessage SetJsonRequestForm(HttpRequestMessage Message, string JsonForm = null) {
+      if (JsonForm != null) {
+        Message.Content = GenerateHttpForm_Json(JsonForm);
+      }
+      return Message;
+    }
 
     #endregion
     #region Exten
@@ -107,6 +117,22 @@
       return await HttpClient.PostAsync(
          Query == null ? Url : GeneratHttpQueryString(Url, Query),
          Form == null ? null : GeneratHttpForm_Multipart_form_data(Form));
+    }
+    public async Task HttpPostHandled(string Url, HttpQueryParas Query = null, string JsonForm = null, HttpResponseHandle Response = null, HttpRequestErrorHandle Catched = null) {
+      try {
+        var ResponseMessage = await HttpClient.PostAsync(
+          Query == null ? Url : GeneratHttpQueryString(Url, Query),
+          JsonForm == null ? null : GenerateHttpForm_Json(JsonForm));
+        Response?.Invoke(ResponseMessage);
+      }
+      catch (Exception e) {
+        Catched?.Invoke(e);
+      }
+    }
+    public async Task<HttpResponseMessage> HttpPostAsync(string Url, HttpQueryParas Query = null, string JsonForm = null) {
+      return await HttpClient.PostAsync(
+         Query == null ? Url : GeneratHttpQueryString(Url, Query),
+         JsonForm == null ? null : GenerateHttpForm_Json(JsonForm));
     }
 
     public async Task HttpGetHandled(string Url, HttpQueryParas Query = null, HttpResponseHandle Response = null, HttpRequestErrorHandle Catched = null) {
@@ -137,6 +163,22 @@
       return await HttpClient.PutAsync(
               Query == null ? Url : GeneratHttpQueryString(Url, Query),
               Form == null ? null : GeneratHttpForm_Multipart_form_data(Form));
+    }
+    public async Task HttpPutHandled(string Url, HttpQueryParas Query = null, string JsonForm = null, HttpResponseHandle Response = null, HttpRequestErrorHandle Catched = null) {
+      try {
+        var ResponseMessage = await HttpClient.PutAsync(
+        Query == null ? Url : GeneratHttpQueryString(Url, Query),
+        JsonForm == null ? null : GenerateHttpForm_Json(JsonForm));
+        Response?.Invoke(ResponseMessage);
+      }
+      catch (Exception e) {
+        Catched?.Invoke(e);
+      }
+    }
+    public async Task<HttpResponseMessage> HttpPutAsync(string Url, HttpQueryParas Query = null, string JsonForm = null) {
+      return await HttpClient.PutAsync(
+              Query == null ? Url : GeneratHttpQueryString(Url, Query),
+              JsonForm == null ? null : GenerateHttpForm_Json(JsonForm));
     }
 
     public async Task HttpDeleteHandled(string Url, HttpQueryParas Query = null, HttpResponseHandle Response = null, HttpRequestErrorHandle Catched = null) {
